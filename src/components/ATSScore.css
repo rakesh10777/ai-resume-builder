@@ -1,0 +1,88 @@
+.ats-score-panel {
+  padding: 16px;
+  background: var(--bg-dark);
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.ats-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.ats-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.ats-status {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.score-meter-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.score-meter {
+  flex: 1;
+  height: 8px;
+  background: var(--bg-card);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.score-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.score-value {
+  font-size: 20px;
+  font-weight: 700;
+  min-width: 36px;
+  text-align: right;
+}
+
+.suggestions {
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.suggestions h4 {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+}
+
+.suggestions ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.suggestions li {
+  font-size: 12px;
+  color: var(--text-secondary);
+  padding: 6px 0;
+  padding-left: 16px;
+  position: relative;
+  line-height: 1.4;
+}
+
+.suggestions li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--primary);
+}

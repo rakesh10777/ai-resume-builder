@@ -1,6 +1,8 @@
-import { createContext, useContext, useState, useCallback } from 'react';
+import { createContext, useContext, useState, useCallback, useEffect } from 'react';
 
 const ResumeContext = createContext(null);
+
+const STORAGE_KEY = 'resumeBuilderData';
 
 const initialResume = {
   personalInfo: {
@@ -20,8 +22,98 @@ const initialResume = {
   },
 };
 
+function loadFromStorage() {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      return JSON.parse(stored);
+    }
+  } catch (e) {
+    console.error('Failed to load from localStorage:', e);
+  }
+  return initialResume;
+}
+
+function saveToStorage(data) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch (e) {
+    console.error('Failed to save to localStorage:', e);
+  }
+}
+
+function countWords(text) {
+  return text.trim().split(/\s+/).filter(Boolean).length;
+}
+
+function hasNumbers(text) {
+  return /[\d%XxkK]/.test(text);
+}
+
+function calculateATSScore(resume) {
+  let score = 0;
+  const suggestions = [];
+
+  const summaryWords = countWords(resume.summary);
+  if (summaryWords >= 40 && summaryWords <= 120) {
+    score += 15;
+  } else {
+    suggestions.push('Write a stronger summary (40–120 words).');
+  }
+
+  if (resume.projects.length >= 2) {
+    score += 10;
+  } else {
+    suggestions.push('Add at least 2 projects.');
+  }
+
+  if (resume.experience.length >= 1) {
+    score += 10;
+  } else {
+    suggestions.push('Add at least 1 experience entry.');
+  }
+
+  const skillsArray = resume.skills.split(',').map(s => s.trim()).filter(Boolean);
+  if (skillsArray.length >= 8) {
+    score += 10;
+  } else {
+    suggestions.push('Add more skills (target 8+).');
+  }
+
+  if (resume.links.github || resume.links.linkedin) {
+    score += 10;
+  } else {
+    suggestions.push('Add GitHub or LinkedIn link.');
+  }
+
+  const hasNumbersInBullets = resume.experience.some(exp => hasNumbers(exp.description)) ||
+                              resume.projects.some(proj => hasNumbers(proj.description));
+  if (hasNumbersInBullets) {
+    score += 15;
+  } else {
+    suggestions.push('Add measurable impact (numbers) in bullets.');
+  }
+
+  const completeEducation = resume.education.filter(edu => edu.school && edu.degree && edu.year);
+  if (completeEducation.length > 0) {
+    score += 10;
+  } else {
+    suggestions.push('Complete all education fields.');
+  }
+
+  score = Math.min(score, 100);
+
+  return { score, suggestions: suggestions.slice(0, 3) };
+}
+
 export function ResumeProvider({ children }) {
-  const [resume, setResume] = useState(initialResume);
+  const [resume, setResume] = useState(loadFromStorage);
+  const [atsScore, setAtsScore] = useState({ score: 0, suggestions: [] });
+
+  useEffect(() => {
+    saveToStorage(resume);
+    setAtsScore(calculateATSScore(resume));
+  }, [resume]);
 
   const updatePersonalInfo = useCallback((field, value) => {
     setResume(prev => ({
@@ -143,6 +235,11 @@ export function ResumeProvider({ children }) {
     });
   }, []);
 
+  const clearData = useCallback(() => {
+    setResume(initialResume);
+    localStorage.removeItem(STORAGE_KEY);
+  }, []);
+
   const value = {
     resume,
     setResume,
@@ -160,6 +257,8 @@ export function ResumeProvider({ children }) {
     updateProject,
     removeProject,
     loadSampleData,
+    clearData,
+    atsScore,
   };
 
   return (

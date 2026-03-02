@@ -1,4 +1,5 @@
 import { useResume } from '../../context/ResumeContext';
+import ATSScore from '../../components/ATSScore';
 import LivePreview from './LivePreview';
 import './Builder.css';
 
@@ -42,6 +43,7 @@ function TextAreaField({ label, value, onChange, placeholder, rows = 4 }) {
 export default function Builder() {
   const {
     resume,
+    atsScore,
     updatePersonalInfo,
     updateSummary,
     updateSkills,
@@ -246,6 +248,7 @@ export default function Builder() {
 
         <div className="builder-preview">
           <h3 className="preview-title">Live Preview</h3>
+          <ATSScore score={atsScore.score} suggestions={atsScore.suggestions} />
           <LivePreview resume={resume} />
         </div>
       </div>
