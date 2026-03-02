@@ -1,0 +1,48 @@
+.export-buttons {
+  display: flex;
+  gap: 12px;
+  padding: 16px 24px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.btn-export {
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid var(--border);
+}
+
+.btn-print {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.btn-print:hover {
+  background: var(--primary-dark);
+}
+
+.btn-copy {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.btn-copy:hover {
+  background: var(--border);
+}
+
+.export-warning {
+  width: 100%;
+  padding: 10px 14px;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid var(--warning);
+  border-radius: 6px;
+  color: var(--warning);
+  font-size: 13px;
+  margin-top: 8px;
+}

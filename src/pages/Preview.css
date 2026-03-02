@@ -209,3 +209,35 @@
 .resume-preview.template-minimal .entry-description {
   font-weight: 300;
 }
+
+@media print {
+  .resume-preview {
+    padding: 0.5in !important;
+  }
+
+  .resume-preview.template-modern {
+    padding: 0.5in !important;
+  }
+
+  .resume-preview.template-modern header {
+    padding: 20px !important;
+    margin: 0 0 20px 0 !important;
+  }
+
+  .resume-preview.template-modern .resume-section h2 {
+    padding: 8px !important;
+    margin: 0 0 10px 0 !important;
+  }
+
+  .resume-section {
+    page-break-inside: avoid;
+  }
+
+  .entry {
+    page-break-inside: avoid;
+  }
+
+  .resume-section h2 {
+    page-break-after: avoid;
+  }
+}

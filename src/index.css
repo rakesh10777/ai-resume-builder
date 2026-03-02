@@ -526,3 +526,104 @@ body {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  .top-nav,
+  .template-tabs,
+  .export-buttons,
+  .preview-scroll,
+  .preview-page::before,
+  .preview-page::after {
+    display: none !important;
+  }
+
+  .preview-page {
+    background: white !important;
+    padding: 0 !important;
+    display: block !important;
+  }
+
+  .preview-container {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .resume-preview {
+    box-shadow: none !important;
+    padding: 0.5in !important;
+    margin: 0 !important;
+    font-size: 11pt !important;
+    line-height: 1.4 !important;
+    background: white !important;
+    color: black !important;
+  }
+
+  .resume-preview.template-modern header {
+    background: #f5f5f5 !important;
+    color: black !important;
+    padding: 20px !important;
+    margin: 0 0 20px 0 !important;
+    border-radius: 0 !important;
+  }
+
+  .resume-preview.template-modern h1 {
+    color: black !important;
+  }
+
+  .resume-preview.template-modern .contact-info {
+    color: #333 !important;
+  }
+
+  .resume-preview.template-modern .resume-section h2 {
+    background: #f5f5f5 !important;
+    color: black !important;
+    padding: 8px !important;
+    margin: 0 0 10px 0 !important;
+  }
+
+  .resume-preview.template-minimal header {
+    border-bottom: 1px solid #ccc !important;
+  }
+
+  .resume-preview.template-minimal h1 {
+    font-weight: 300 !important;
+    text-transform: uppercase !important;
+  }
+
+  .resume-preview.template-minimal .resume-section h2 {
+    color: #666 !important;
+    border-bottom: none !important;
+  }
+
+  .resume-section {
+    page-break-inside: avoid !important;
+  }
+
+  .entry {
+    page-break-inside: avoid !important;
+  }
+
+  .resume-section h2 {
+    page-break-after: avoid !important;
+  }
+
+  .entry-description {
+    page-break-inside: avoid !important;
+  }
+
+  @page {
+    margin: 0.5in;
+    size: letter;
+  }
+}

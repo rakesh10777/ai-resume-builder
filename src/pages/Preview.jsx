@@ -1,5 +1,6 @@
 import { useResume } from '../context/ResumeContext';
 import TemplateTabs from '../components/TemplateTabs';
+import ExportButtons from '../components/ExportButtons';
 import './Preview.css';
 
 export default function Preview() {
@@ -9,6 +10,7 @@ export default function Preview() {
   return (
     <div className="preview-page">
       <TemplateTabs />
+      <ExportButtons resume={resume} template={template} />
       <div className="preview-scroll">
         <div className="preview-container">
           <article className={`resume-preview template-${template}`}>
