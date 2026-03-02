@@ -46,9 +46,16 @@
 
 .builder-preview {
   width: 400px;
-  padding: 24px;
   background: var(--bg-card);
   border-left: 1px solid var(--border);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.preview-content {
+  padding: 24px;
+  flex: 1;
   overflow-y: auto;
 }
 
@@ -161,4 +168,12 @@
 
 .btn-remove:hover {
   background: rgba(239, 68, 68, 0.1);
+}
+
+.bullet-guidance {
+  display: block;
+  font-size: 11px;
+  color: var(--warning);
+  margin-top: 6px;
+  font-style: italic;
 }

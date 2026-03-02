@@ -3,6 +3,7 @@ import { createContext, useContext, useState, useCallback, useEffect } from 'rea
 const ResumeContext = createContext(null);
 
 const STORAGE_KEY = 'resumeBuilderData';
+const TEMPLATE_KEY = 'resumeBuilderTemplate';
 
 const initialResume = {
   personalInfo: {
@@ -42,12 +43,39 @@ function saveToStorage(data) {
   }
 }
 
+function loadTemplateFromStorage() {
+  try {
+    const stored = localStorage.getItem(TEMPLATE_KEY);
+    if (stored) {
+      return stored;
+    }
+  } catch (e) {
+    console.error('Failed to load template from localStorage:', e);
+  }
+  return 'classic';
+}
+
+function saveTemplateToStorage(template) {
+  try {
+    localStorage.setItem(TEMPLATE_KEY, template);
+  } catch (e) {
+    console.error('Failed to save template to localStorage:', e);
+  }
+}
+
 function countWords(text) {
   return text.trim().split(/\s+/).filter(Boolean).length;
 }
 
 function hasNumbers(text) {
   return /[\d%XxkK]/.test(text);
+}
+
+const ACTION_VERBS = ['Built', 'Developed', 'Designed', 'Implemented', 'Led', 'Improved', 'Created', 'Optimized', 'Automated', 'Managed', 'Created', 'Established', 'Launched', 'Delivered', 'Reduced', 'Increased', 'Built', 'Engineered', 'Architected', 'Spearheaded'];
+
+function startsWithActionVerb(text) {
+  const trimmed = text.trim();
+  return ACTION_VERBS.some(verb => trimmed.toLowerCase().startsWith(verb.toLowerCase()));
 }
 
 function calculateATSScore(resume) {
@@ -106,14 +134,51 @@ function calculateATSScore(resume) {
   return { score, suggestions: suggestions.slice(0, 3) };
 }
 
+function calculateImprovements(resume) {
+  const improvements = [];
+  const summaryWords = countWords(resume.summary);
+  const skillsArray = resume.skills.split(',').map(s => s.trim()).filter(Boolean);
+
+  if (resume.projects.length < 2) {
+    improvements.push('Add more projects to showcase your skills');
+  }
+
+  const hasNumbersInBullets = resume.experience.some(exp => hasNumbers(exp.description)) ||
+                              resume.projects.some(proj => hasNumbers(proj.description));
+  if (!hasNumbersInBullets) {
+    improvements.push('Add measurable impact with numbers in your bullets');
+  }
+
+  if (summaryWords < 40) {
+    improvements.push('Expand your summary to at least 40 words');
+  }
+
+  if (skillsArray.length < 8) {
+    improvements.push('Add more skills (target 8+)');
+  }
+
+  if (resume.experience.length === 0) {
+    improvements.push('Add experience or internship work');
+  }
+
+  return improvements.slice(0, 3);
+}
+
 export function ResumeProvider({ children }) {
   const [resume, setResume] = useState(loadFromStorage);
+  const [template, setTemplate] = useState(loadTemplateFromStorage);
   const [atsScore, setAtsScore] = useState({ score: 0, suggestions: [] });
+  const [improvements, setImprovements] = useState([]);
 
   useEffect(() => {
     saveToStorage(resume);
     setAtsScore(calculateATSScore(resume));
+    setImprovements(calculateImprovements(resume));
   }, [resume]);
+
+  useEffect(() => {
+    saveTemplateToStorage(template);
+  }, [template]);
 
   const updatePersonalInfo = useCallback((field, value) => {
     setResume(prev => ({
@@ -243,6 +308,8 @@ export function ResumeProvider({ children }) {
   const value = {
     resume,
     setResume,
+    template,
+    setTemplate,
     updatePersonalInfo,
     updateSummary,
     updateSkills,
@@ -259,6 +326,7 @@ export function ResumeProvider({ children }) {
     loadSampleData,
     clearData,
     atsScore,
+    improvements,
   };
 
   return (

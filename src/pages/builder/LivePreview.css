@@ -118,3 +118,111 @@
   font-size: 12px;
   color: #0066cc;
 }
+
+/* Classic Template */
+.live-preview.template-classic .resume-document {
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.live-preview.template-classic .resume-header {
+  border-bottom: 3px solid #000;
+}
+
+.live-preview.template-classic .resume-name {
+  font-size: 26px;
+}
+
+.live-preview.template-classic .resume-section h2 {
+  border-bottom: 1px solid #000;
+}
+
+/* Modern Template */
+.live-preview.template-modern .resume-document {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.live-preview.template-modern .resume-header {
+  background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
+  color: white;
+  padding: 24px 32px;
+  margin: -32px -32px 20px -32px;
+  border-radius: 4px 4px 0 0;
+  border-bottom: none;
+}
+
+.live-preview.template-modern .resume-name {
+  color: white;
+  font-size: 28px;
+}
+
+.live-preview.template-modern .resume-contact {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.live-preview.template-modern .resume-contact span:not(:last-child)::after {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.live-preview.template-modern .resume-section h2 {
+  background: #1a1a1a;
+  color: white;
+  padding: 8px 12px;
+  margin: 0 -12px 10px -12px;
+  border: none;
+}
+
+.live-preview.template-modern .skill-tag {
+  background: #1a1a1a;
+  color: white;
+}
+
+/* Minimal Template */
+.live-preview.template-minimal .resume-document {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 24px;
+}
+
+.live-preview.template-minimal .resume-header {
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 12px;
+}
+
+.live-preview.template-minimal .resume-name {
+  font-weight: 300;
+  font-size: 22px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.live-preview.template-minimal .resume-contact {
+  font-size: 11px;
+  color: #888;
+}
+
+.live-preview.template-minimal .resume-section h2 {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #888;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.live-preview.template-minimal .item-header strong {
+  font-weight: 600;
+}
+
+.live-preview.template-minimal .item-header span {
+  font-weight: 300;
+}
+
+.live-preview.template-minimal .skill-tag {
+  background: transparent;
+  border: 1px solid #ddd;
+  padding: 4px 10px;
+}
+
+.live-preview.template-minimal .item-description {
+  font-weight: 300;
+}

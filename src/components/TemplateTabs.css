@@ -1,0 +1,42 @@
+.template-tabs {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+}
+
+.template-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.template-options {
+  display: flex;
+  gap: 4px;
+}
+
+.template-tab {
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.template-tab:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+.template-tab.active {
+  color: var(--text-primary);
+  background: var(--primary);
+  border-color: var(--primary);
+}

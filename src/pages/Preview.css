@@ -1,14 +1,20 @@
 .preview-page {
   min-height: 100vh;
   background: #525659;
-  padding: 40px 20px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+}
+
+.preview-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 40px 20px;
 }
 
 .preview-container {
   width: 100%;
   max-width: 800px;
+  margin: 0 auto;
 }
 
 .resume-preview {
@@ -110,4 +116,96 @@
   font-size: 10pt;
   color: #000;
   margin: 0;
+}
+
+/* Classic Template */
+.resume-preview.template-classic {
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.resume-preview.template-classic header {
+  border-bottom: 3px solid #000;
+}
+
+.resume-preview.template-classic .resume-section h2 {
+  border-bottom: 1px solid #000;
+}
+
+/* Modern Template */
+.resume-preview.template-modern {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.resume-preview.template-modern header {
+  background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
+  color: white;
+  padding: 32px 40px;
+  margin: -48px -56px 24px -56px;
+  border-radius: 0;
+  border-bottom: none;
+}
+
+.resume-preview.template-modern h1 {
+  color: white;
+}
+
+.resume-preview.template-modern .contact-info {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.resume-preview.template-modern .contact-info span:not(:last-child)::after {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.resume-preview.template-modern .resume-section h2 {
+  background: #1a1a1a;
+  color: white;
+  padding: 8px 12px;
+  margin: 0 -12px 10px -12px;
+  border: none;
+}
+
+/* Minimal Template */
+.resume-preview.template-minimal {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 32px 40px;
+}
+
+.resume-preview.template-minimal header {
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 12px;
+}
+
+.resume-preview.template-minimal h1 {
+  font-weight: 300;
+  font-size: 20pt;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.resume-preview.template-minimal .contact-info {
+  font-size: 9pt;
+  color: #888;
+}
+
+.resume-preview.template-minimal .resume-section h2 {
+  font-size: 10pt;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #888;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.resume-preview.template-minimal .entry-title {
+  font-weight: 600;
+}
+
+.resume-preview.template-minimal .entry-date {
+  font-weight: 300;
+}
+
+.resume-preview.template-minimal .entry-description {
+  font-weight: 300;
 }

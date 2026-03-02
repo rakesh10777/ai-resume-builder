@@ -1,7 +1,19 @@
 import { useResume } from '../../context/ResumeContext';
 import ATSScore from '../../components/ATSScore';
+import TemplateTabs from '../../components/TemplateTabs';
 import LivePreview from './LivePreview';
 import './Builder.css';
+
+const ACTION_VERBS = ['Built', 'Developed', 'Designed', 'Implemented', 'Led', 'Improved', 'Created', 'Optimized', 'Automated', 'Managed', 'Established', 'Launched', 'Delivered', 'Reduced', 'Increased', 'Engineered', 'Architected', 'Spearheaded'];
+
+function startsWithActionVerb(text) {
+  const trimmed = text.trim();
+  return ACTION_VERBS.some(verb => trimmed.toLowerCase().startsWith(verb.toLowerCase()));
+}
+
+function hasNumbers(text) {
+  return /[\d%XxkK]/.test(text);
+}
 
 function FormSection({ title, children }) {
   return (
@@ -44,6 +56,7 @@ export default function Builder() {
   const {
     resume,
     atsScore,
+    improvements,
     updatePersonalInfo,
     updateSummary,
     updateSkills,
@@ -171,13 +184,21 @@ export default function Builder() {
                     placeholder="2020 - Present"
                   />
                 </div>
-                <TextAreaField
-                  label="Description"
-                  value={exp.description}
-                  onChange={(v) => updateExperience(exp.id, 'description', v)}
-                  placeholder="Describe your responsibilities and achievements..."
-                  rows={3}
-                />
+                <div className="input-field">
+                  <label>Description</label>
+                  <textarea
+                    value={exp.description}
+                    onChange={(v) => updateExperience(exp.id, 'description', v)}
+                    placeholder="Describe your responsibilities and achievements..."
+                    rows={3}
+                  />
+                  {exp.description && !startsWithActionVerb(exp.description) && (
+                    <span className="bullet-guidance">Start with a strong action verb.</span>
+                  )}
+                  {exp.description && !hasNumbers(exp.description) && (
+                    <span className="bullet-guidance">Add measurable impact (numbers).</span>
+                  )}
+                </div>
                 <button className="btn-remove" onClick={() => removeExperience(exp.id)}>
                   Remove
                 </button>
@@ -203,13 +224,18 @@ export default function Builder() {
                     placeholder="https://github.com/..."
                   />
                 </div>
-                <TextAreaField
-                  label="Description"
-                  value={proj.description}
-                  onChange={(v) => updateProject(proj.id, 'description', v)}
-                  placeholder="Brief description of the project..."
-                  rows={2}
-                />
+                <div className="input-field">
+                  <label>Description</label>
+                  <textarea
+                    value={proj.description}
+                    onChange={(v) => updateProject(proj.id, 'description', v)}
+                    placeholder="Brief description of the project..."
+                    rows={2}
+                  />
+                  {proj.description && !hasNumbers(proj.description) && (
+                    <span className="bullet-guidance">Add measurable impact (numbers).</span>
+                  )}
+                </div>
                 <button className="btn-remove" onClick={() => removeProject(proj.id)}>
                   Remove
                 </button>
@@ -247,9 +273,12 @@ export default function Builder() {
         </div>
 
         <div className="builder-preview">
-          <h3 className="preview-title">Live Preview</h3>
-          <ATSScore score={atsScore.score} suggestions={atsScore.suggestions} />
-          <LivePreview resume={resume} />
+          <TemplateTabs />
+          <div className="preview-content">
+            <h3 className="preview-title">Live Preview</h3>
+            <ATSScore score={atsScore.score} suggestions={atsScore.suggestions} improvements={improvements} />
+            <LivePreview resume={resume} />
+          </div>
         </div>
       </div>
     </div>

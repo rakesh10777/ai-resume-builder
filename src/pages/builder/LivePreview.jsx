@@ -1,10 +1,12 @@
+import { useResume } from '../../context/ResumeContext';
 import './LivePreview.css';
 
 export default function LivePreview({ resume }) {
+  const { template } = useResume();
   const skillsArray = resume.skills.split(',').map(s => s.trim()).filter(Boolean);
 
   return (
-    <div className="live-preview">
+    <div className={`live-preview template-${template}`}>
       <div className="resume-document">
         <header className="resume-header">
           <h1 className="resume-name">{resume.personalInfo.name || 'Your Name'}</h1>

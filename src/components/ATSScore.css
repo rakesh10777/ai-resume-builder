@@ -86,3 +86,40 @@
   left: 0;
   color: var(--primary);
 }
+
+.improvements {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.improvements h4 {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+}
+
+.improvements ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.improvements li {
+  font-size: 12px;
+  color: var(--text-secondary);
+  padding: 6px 0;
+  padding-left: 16px;
+  position: relative;
+  line-height: 1.4;
+}
+
+.improvements li::before {
+  content: '↑';
+  position: absolute;
+  left: 0;
+  color: var(--warning);
+}
