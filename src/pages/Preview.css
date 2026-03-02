@@ -1,0 +1,113 @@
+.preview-page {
+  min-height: 100vh;
+  background: #525659;
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.preview-container {
+  width: 100%;
+  max-width: 800px;
+}
+
+.resume-preview {
+  background: white;
+  padding: 48px 56px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  font-family: 'Times New Roman', Georgia, serif;
+  color: #000;
+  font-size: 11pt;
+  line-height: 1.4;
+}
+
+.resume-preview header {
+  text-align: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #000;
+}
+
+.resume-preview h1 {
+  font-size: 24pt;
+  font-weight: 700;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+.contact-info {
+  font-size: 10pt;
+  color: #333;
+}
+
+.contact-info span:not(:last-child)::after {
+  content: '|';
+  margin: 0 10px;
+  color: #999;
+}
+
+.resume-section {
+  margin-bottom: 20px;
+}
+
+.resume-section h2 {
+  font-size: 12pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #ccc;
+}
+
+.entry {
+  margin-bottom: 14px;
+}
+
+.entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 2px;
+}
+
+.entry-title {
+  font-weight: 700;
+  font-size: 11pt;
+}
+
+.entry-date {
+  font-size: 10pt;
+  color: #555;
+}
+
+.entry-subtitle {
+  font-style: italic;
+  font-size: 10.5pt;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.entry-description {
+  font-size: 10pt;
+  color: #333;
+  margin: 0;
+}
+
+.entry-link {
+  font-size: 9pt;
+  color: #000;
+  text-decoration: underline;
+}
+
+.skills-preview {
+  font-size: 10pt;
+  color: #333;
+  margin: 0;
+}
+
+.links-preview {
+  font-size: 10pt;
+  color: #000;
+  margin: 0;
+}

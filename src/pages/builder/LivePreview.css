@@ -1,0 +1,120 @@
+.live-preview {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.resume-document {
+  background: white;
+  padding: 32px;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: 'Georgia', serif;
+  color: #1a1a1a;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.resume-header {
+  text-align: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #1a1a1a;
+}
+
+.resume-name {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+.resume-contact {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  font-size: 12px;
+  color: #444;
+}
+
+.resume-contact span:not(:last-child)::after {
+  content: '|';
+  margin-left: 16px;
+  color: #ccc;
+}
+
+.resume-section {
+  margin-bottom: 16px;
+}
+
+.resume-section h2 {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #ddd;
+}
+
+.resume-section p {
+  margin-bottom: 8px;
+}
+
+.resume-item {
+  margin-bottom: 12px;
+}
+
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 2px;
+}
+
+.item-header strong {
+  font-size: 13px;
+}
+
+.item-header span {
+  font-size: 11px;
+  color: #666;
+}
+
+.item-role {
+  font-size: 12px;
+  font-style: italic;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+.item-description {
+  font-size: 12px;
+  color: #444;
+}
+
+.item-link {
+  font-size: 11px;
+  color: #0066cc;
+}
+
+.skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.skill-tag {
+  padding: 2px 8px;
+  background: #f0f0f0;
+  border-radius: 3px;
+  font-size: 11px;
+}
+
+.links-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: #0066cc;
+}

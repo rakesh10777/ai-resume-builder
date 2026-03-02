@@ -1,0 +1,85 @@
+.proof-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.proof-content {
+  text-align: center;
+  max-width: 500px;
+}
+
+.proof-content h1 {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.proof-subtitle {
+  color: var(--text-secondary);
+  font-size: 16px;
+  margin-bottom: 40px;
+}
+
+.proof-placeholder {
+  padding: 48px;
+  background: var(--bg-card);
+  border-radius: 12px;
+  border: 1px dashed var(--border);
+  margin-bottom: 32px;
+}
+
+.placeholder-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.proof-placeholder h2 {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.proof-placeholder p {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.proof-checklist {
+  text-align: left;
+  padding: 24px;
+  background: var(--bg-card);
+  border-radius: 12px;
+}
+
+.proof-checklist h3 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.proof-checklist ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.proof-checklist li {
+  padding: 8px 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border);
+}
+
+.proof-checklist li:last-child {
+  border-bottom: none;
+}
+
+.proof-checklist li::before {
+  content: '○';
+  margin-right: 10px;
+  color: var(--text-secondary);
+}
