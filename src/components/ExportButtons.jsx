@@ -9,7 +9,7 @@ export default function ExportButtons({ resume, template }) {
   const hasContent = resume.experience.length > 0 || resume.projects.length > 0;
 
   const generatePlainText = () => {
-    const skillsArray = resume.skills.split(',').map(s => s.trim()).filter(Boolean);
+    const skillsArray = resume.skills;
     
     let text = '';
     
@@ -52,17 +52,32 @@ export default function ExportButtons({ resume, template }) {
       text += 'PROJECTS\n';
       text += '-'.repeat(40) + '\n';
       resume.projects.forEach(proj => {
-        text += `${proj.name}\n`;
+        text += `${proj.title}\n`;
         text += `${proj.description}\n`;
-        if (proj.link) text += `${proj.link}\n`;
+        if (proj.techStack?.length > 0) text += `Tech: ${proj.techStack.join(', ')}\n`;
+        if (proj.liveUrl) text += `Live: ${proj.liveUrl}\n`;
+        if (proj.githubUrl) text += `GitHub: ${proj.githubUrl}\n`;
         text += '\n';
       });
     }
 
-    if (skillsArray.length > 0) {
+    const hasAnySkills = (skillsArray.technical?.length > 0) || 
+                        (skillsArray.soft?.length > 0) || 
+                        (skillsArray.tools?.length > 0);
+
+    if (hasAnySkills) {
       text += 'SKILLS\n';
       text += '-'.repeat(40) + '\n';
-      text += skillsArray.join(', ') + '\n\n';
+      if (skillsArray.technical?.length > 0) {
+        text += `Technical: ${skillsArray.technical.join(', ')}\n`;
+      }
+      if (skillsArray.soft?.length > 0) {
+        text += `Soft Skills: ${skillsArray.soft.join(', ')}\n`;
+      }
+      if (skillsArray.tools?.length > 0) {
+        text += `Tools: ${skillsArray.tools.join(', ')}\n`;
+      }
+      text += '\n';
     }
 
     if (resume.links.github || resume.links.linkedin) {

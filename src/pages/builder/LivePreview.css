@@ -119,6 +119,79 @@
   color: #0066cc;
 }
 
+/* Skill Groups */
+.skill-group {
+  margin-bottom: 10px;
+}
+
+.skill-group-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #333;
+}
+
+.skill-group .skills-list {
+  margin-top: 6px;
+}
+
+/* Project Card Preview */
+.project-card-preview {
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.project-card-preview:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.project-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 4px;
+}
+
+.project-name {
+  font-size: 13px;
+}
+
+.project-links {
+  display: flex;
+  gap: 8px;
+}
+
+.project-link-icon {
+  color: #666;
+  display: inline-flex;
+  align-items: center;
+}
+
+.project-link-icon:hover {
+  color: #000;
+}
+
+.project-description {
+  font-size: 12px;
+  color: #444;
+  margin-bottom: 6px;
+}
+
+.project-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.tech-pill {
+  padding: 2px 6px;
+  background: #f0f0f0;
+  border-radius: 3px;
+  font-size: 10px;
+  color: #555;
+}
+
 /* Classic Template */
 .live-preview.template-classic .resume-document {
   font-family: 'Times New Roman', Times, serif;

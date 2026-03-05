@@ -1,6 +1,9 @@
+import { useState } from 'react';
 import { useResume } from '../../context/ResumeContext';
 import ATSScore from '../../components/ATSScore';
 import TemplateTabs from '../../components/TemplateTabs';
+import TagInput from '../../components/TagInput';
+import ProjectCard from '../../components/ProjectCard';
 import LivePreview from './LivePreview';
 import './Builder.css';
 
@@ -59,7 +62,9 @@ export default function Builder() {
     improvements,
     updatePersonalInfo,
     updateSummary,
-    updateSkills,
+    addSkill,
+    removeSkill,
+    suggestSkills,
     updateLinks,
     addEducation,
     updateEducation,
@@ -69,9 +74,19 @@ export default function Builder() {
     removeExperience,
     addProject,
     updateProject,
+    addProjectTech,
+    removeProjectTech,
     removeProject,
     loadSampleData,
   } = useResume();
+
+  const [suggesting, setSuggesting] = useState(false);
+
+  const handleSuggestSkills = async () => {
+    setSuggesting(true);
+    await suggestSkills();
+    setSuggesting(false);
+  };
 
   return (
     <div className="builder-page">
@@ -209,49 +224,67 @@ export default function Builder() {
 
           <FormSection title="Projects">
             {resume.projects.map((proj) => (
-              <div key={proj.id} className="repeatable-item">
-                <div className="form-row">
-                  <InputField
-                    label="Project Name"
-                    value={proj.name}
-                    onChange={(v) => updateProject(proj.id, 'name', v)}
-                    placeholder="My Project"
-                  />
-                  <InputField
-                    label="Link"
-                    value={proj.link}
-                    onChange={(v) => updateProject(proj.id, 'link', v)}
-                    placeholder="https://github.com/..."
-                  />
-                </div>
-                <div className="input-field">
-                  <label>Description</label>
-                  <textarea
-                    value={proj.description}
-                    onChange={(v) => updateProject(proj.id, 'description', v)}
-                    placeholder="Brief description of the project..."
-                    rows={2}
-                  />
-                  {proj.description && !hasNumbers(proj.description) && (
-                    <span className="bullet-guidance">Add measurable impact (numbers).</span>
-                  )}
-                </div>
-                <button className="btn-remove" onClick={() => removeProject(proj.id)}>
-                  Remove
-                </button>
-              </div>
+              <ProjectCard
+                key={proj.id}
+                project={proj}
+                onUpdate={updateProject}
+                onRemove={removeProject}
+                onAddTech={addProjectTech}
+                onRemoveTech={removeProjectTech}
+              />
             ))}
             <button className="btn-add" onClick={addProject}>+ Add Project</button>
           </FormSection>
 
           <FormSection title="Skills">
-            <TextAreaField
-              label="Skills (comma-separated)"
-              value={resume.skills}
-              onChange={updateSkills}
-              placeholder="JavaScript, React, Node.js, Python..."
-              rows={2}
-            />
+            <div className="skills-section">
+              <div className="skill-category">
+                <div className="skill-category-header">
+                  <span className="skill-category-label">Technical Skills</span>
+                  <span className="skill-count">({resume.skills.technical?.length || 0})</span>
+                </div>
+                <TagInput
+                  tags={resume.skills.technical || []}
+                  onAdd={(skill) => addSkill('technical', skill)}
+                  onRemove={(skill) => removeSkill('technical', skill)}
+                  placeholder="Type and press Enter..."
+                />
+              </div>
+
+              <div className="skill-category">
+                <div className="skill-category-header">
+                  <span className="skill-category-label">Soft Skills</span>
+                  <span className="skill-count">({resume.skills.soft?.length || 0})</span>
+                </div>
+                <TagInput
+                  tags={resume.skills.soft || []}
+                  onAdd={(skill) => addSkill('soft', skill)}
+                  onRemove={(skill) => removeSkill('soft', skill)}
+                  placeholder="Type and press Enter..."
+                />
+              </div>
+
+              <div className="skill-category">
+                <div className="skill-category-header">
+                  <span className="skill-category-label">Tools & Technologies</span>
+                  <span className="skill-count">({resume.skills.tools?.length || 0})</span>
+                </div>
+                <TagInput
+                  tags={resume.skills.tools || []}
+                  onAdd={(skill) => addSkill('tools', skill)}
+                  onRemove={(skill) => removeSkill('tools', skill)}
+                  placeholder="Type and press Enter..."
+                />
+              </div>
+
+              <button 
+                className="btn-suggest" 
+                onClick={handleSuggestSkills}
+                disabled={suggesting}
+              >
+                {suggesting ? '✨ Adding skills...' : '✨ Suggest Skills'}
+              </button>
+            </div>
           </FormSection>
 
           <FormSection title="Links">

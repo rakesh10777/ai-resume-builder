@@ -5,7 +5,11 @@ import './Preview.css';
 
 export default function Preview() {
   const { resume, template } = useResume();
-  const skillsArray = resume.skills.split(',').map(s => s.trim()).filter(Boolean);
+  const skillsArray = resume.skills;
+
+  const hasAnySkills = (skillsArray.technical?.length > 0) || 
+                      (skillsArray.soft?.length > 0) || 
+                      (skillsArray.tools?.length > 0);
 
   return (
     <div className="preview-page">
@@ -65,21 +69,51 @@ export default function Preview() {
               <section className="resume-section">
                 <h2>Projects</h2>
                 {resume.projects.map((proj) => (
-                  <div key={proj.id} className="entry">
+                  <div key={proj.id} className="entry project-entry">
                     <div className="entry-header">
-                      <span className="entry-title">{proj.name}</span>
-                      {proj.link && <span className="entry-link">{proj.link}</span>}
+                      <span className="entry-title">{proj.title}</span>
+                      <div className="project-links-row">
+                        {proj.githubUrl && (
+                          <a href={proj.githubUrl} target="_blank" rel="noopener noreferrer" className="entry-link">
+                            GitHub
+                          </a>
+                        )}
+                        {proj.liveUrl && (
+                          <a href={proj.liveUrl} target="_blank" rel="noopener noreferrer" className="entry-link">
+                            Live
+                          </a>
+                        )}
+                      </div>
                     </div>
-                    <p className="entry-description">{proj.description}</p>
+                    {proj.description && <p className="entry-description">{proj.description}</p>}
+                    {(proj.techStack || []).length > 0 && (
+                      <div className="project-tech-preview">
+                        {proj.techStack.join(' • ')}
+                      </div>
+                    )}
                   </div>
                 ))}
               </section>
             )}
 
-            {skillsArray.length > 0 && (
+            {hasAnySkills && (
               <section className="resume-section">
                 <h2>Skills</h2>
-                <p className="skills-preview">{skillsArray.join(' • ')}</p>
+                {skillsArray.technical?.length > 0 && (
+                  <div className="skill-group-preview">
+                    <strong>Technical:</strong> {skillsArray.technical.join(', ')}
+                  </div>
+                )}
+                {skillsArray.soft?.length > 0 && (
+                  <div className="skill-group-preview">
+                    <strong>Soft Skills:</strong> {skillsArray.soft.join(', ')}
+                  </div>
+                )}
+                {skillsArray.tools?.length > 0 && (
+                  <div className="skill-group-preview">
+                    <strong>Tools:</strong> {skillsArray.tools.join(', ')}
+                  </div>
+                )}
               </section>
             )}
 

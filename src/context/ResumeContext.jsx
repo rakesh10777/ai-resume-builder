@@ -16,7 +16,11 @@ const initialResume = {
   education: [],
   experience: [],
   projects: [],
-  skills: '',
+  skills: {
+    technical: [],
+    soft: [],
+    tools: [],
+  },
   links: {
     github: '',
     linkedin: '',
@@ -27,7 +31,11 @@ function loadFromStorage() {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
-      return JSON.parse(stored);
+      const parsed = JSON.parse(stored);
+      if (!parsed.skills || typeof parsed.skills === 'string') {
+        parsed.skills = initialResume.skills;
+      }
+      return parsed;
     }
   } catch (e) {
     console.error('Failed to load from localStorage:', e);
@@ -78,6 +86,10 @@ function startsWithActionVerb(text) {
   return ACTION_VERBS.some(verb => trimmed.toLowerCase().startsWith(verb.toLowerCase()));
 }
 
+function getTotalSkills(skills) {
+  return (skills.technical?.length || 0) + (skills.soft?.length || 0) + (skills.tools?.length || 0);
+}
+
 function calculateATSScore(resume) {
   let score = 0;
   const suggestions = [];
@@ -101,8 +113,8 @@ function calculateATSScore(resume) {
     suggestions.push('Add at least 1 experience entry.');
   }
 
-  const skillsArray = resume.skills.split(',').map(s => s.trim()).filter(Boolean);
-  if (skillsArray.length >= 8) {
+  const totalSkills = getTotalSkills(resume.skills);
+  if (totalSkills >= 8) {
     score += 10;
   } else {
     suggestions.push('Add more skills (target 8+).');
@@ -137,7 +149,7 @@ function calculateATSScore(resume) {
 function calculateImprovements(resume) {
   const improvements = [];
   const summaryWords = countWords(resume.summary);
-  const skillsArray = resume.skills.split(',').map(s => s.trim()).filter(Boolean);
+  const totalSkills = getTotalSkills(resume.skills);
 
   if (resume.projects.length < 2) {
     improvements.push('Add more projects to showcase your skills');
@@ -153,7 +165,7 @@ function calculateImprovements(resume) {
     improvements.push('Expand your summary to at least 40 words');
   }
 
-  if (skillsArray.length < 8) {
+  if (totalSkills < 8) {
     improvements.push('Add more skills (target 8+)');
   }
 
@@ -191,8 +203,43 @@ export function ResumeProvider({ children }) {
     setResume(prev => ({ ...prev, summary: value }));
   }, []);
 
-  const updateSkills = useCallback((value) => {
-    setResume(prev => ({ ...prev, skills: value }));
+  const addSkill = useCallback((category, skill) => {
+    if (!skill.trim()) return;
+    setResume(prev => ({
+      ...prev,
+      skills: {
+        ...prev.skills,
+        [category]: prev.skills[category]?.includes(skill.trim()) 
+          ? prev.skills[category] 
+          : [...(prev.skills[category] || []), skill.trim()],
+      },
+    }));
+  }, []);
+
+  const removeSkill = useCallback((category, skill) => {
+    setResume(prev => ({
+      ...prev,
+      skills: {
+        ...prev.skills,
+        [category]: prev.skills[category]?.filter(s => s !== skill),
+      },
+    }));
+  }, []);
+
+  const suggestSkills = useCallback(() => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        setResume(prev => ({
+          ...prev,
+          skills: {
+            technical: [...new Set([...prev.skills.technical, 'TypeScript', 'React', 'Node.js', 'PostgreSQL', 'GraphQL'])],
+            soft: [...new Set([...prev.skills.soft, 'Team Leadership', 'Problem Solving'])],
+            tools: [...new Set([...prev.skills.tools, 'Git', 'Docker', 'AWS'])],
+          },
+        }));
+        resolve();
+      }, 1000);
+    });
   }, []);
 
   const updateLinks = useCallback((field, value) => {
@@ -251,7 +298,14 @@ export function ResumeProvider({ children }) {
   const addProject = useCallback(() => {
     setResume(prev => ({
       ...prev,
-      projects: [...prev.projects, { id: Date.now(), name: '', description: '', link: '' }],
+      projects: [...prev.projects, { 
+        id: Date.now(), 
+        title: '', 
+        description: '', 
+        techStack: [],
+        liveUrl: '',
+        githubUrl: '',
+      }],
     }));
   }, []);
 
@@ -260,6 +314,34 @@ export function ResumeProvider({ children }) {
       ...prev,
       projects: prev.projects.map(proj => 
         proj.id === id ? { ...proj, [field]: value } : proj
+      ),
+    }));
+  }, []);
+
+  const addProjectTech = useCallback((projectId, tech) => {
+    if (!tech.trim()) return;
+    setResume(prev => ({
+      ...prev,
+      projects: prev.projects.map(proj => 
+        proj.id === projectId 
+          ? { 
+              ...proj, 
+              techStack: proj.techStack?.includes(tech.trim()) 
+                ? proj.techStack 
+                : [...(proj.techStack || []), tech.trim()] 
+            } 
+          : proj
+      ),
+    }));
+  }, []);
+
+  const removeProjectTech = useCallback((projectId, tech) => {
+    setResume(prev => ({
+      ...prev,
+      projects: prev.projects.map(proj => 
+        proj.id === projectId 
+          ? { ...proj, techStack: proj.techStack?.filter(t => t !== tech) }
+          : proj
       ),
     }));
   }, []);
@@ -289,10 +371,28 @@ export function ResumeProvider({ children }) {
         { id: 2, company: 'StartupXYZ', role: 'Full Stack Developer', duration: '2019 - 2021', description: 'Built and maintained e-commerce platform from scratch. Integrated payment gateways and real-time inventory system.' },
       ],
       projects: [
-        { id: 1, name: 'AI Code Assistant', description: 'VS Code extension using OpenAI API for intelligent code completion', link: 'https://github.com/alex/ai-code-assistant' },
-        { id: 2, name: 'TaskFlow', description: 'Project management app with real-time collaboration features', link: 'https://taskflow.app' },
+        { 
+          id: 1, 
+          title: 'AI Code Assistant', 
+          description: 'VS Code extension using OpenAI API for intelligent code completion', 
+          techStack: ['TypeScript', 'OpenAI API', 'VS Code API'],
+          liveUrl: '',
+          githubUrl: 'https://github.com/alex/ai-code-assistant'
+        },
+        { 
+          id: 2, 
+          title: 'TaskFlow', 
+          description: 'Project management app with real-time collaboration features',
+          techStack: ['React', 'Node.js', 'Socket.io', 'MongoDB'],
+          liveUrl: 'https://taskflow.app',
+          githubUrl: ''
+        },
       ],
-      skills: 'JavaScript, TypeScript, React, Node.js, Python, PostgreSQL, MongoDB, AWS, Docker, Kubernetes',
+      skills: {
+        technical: ['JavaScript', 'TypeScript', 'React', 'Node.js', 'Python'],
+        soft: ['Team Leadership', 'Problem Solving'],
+        tools: ['Git', 'Docker', 'AWS', 'PostgreSQL', 'MongoDB'],
+      },
       links: {
         github: 'https://github.com/alexjohnson',
         linkedin: 'https://linkedin.com/in/alexjohnson',
@@ -312,7 +412,9 @@ export function ResumeProvider({ children }) {
     setTemplate,
     updatePersonalInfo,
     updateSummary,
-    updateSkills,
+    addSkill,
+    removeSkill,
+    suggestSkills,
     updateLinks,
     addEducation,
     updateEducation,
@@ -322,6 +424,8 @@ export function ResumeProvider({ children }) {
     removeExperience,
     addProject,
     updateProject,
+    addProjectTech,
+    removeProjectTech,
     removeProject,
     loadSampleData,
     clearData,

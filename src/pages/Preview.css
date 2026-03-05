@@ -118,6 +118,36 @@
   margin: 0;
 }
 
+.project-entry {
+  padding-bottom: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.project-entry:last-child {
+  border-bottom: none;
+}
+
+.project-links-row {
+  display: flex;
+  gap: 10px;
+}
+
+.project-tech-preview {
+  font-size: 9pt;
+  color: #666;
+  margin-top: 4px;
+}
+
+.skill-group-preview {
+  font-size: 10pt;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+.skill-group-preview strong {
+  font-weight: 600;
+}
+
 /* Classic Template */
 .resume-preview.template-classic {
   font-family: 'Times New Roman', Times, serif;
