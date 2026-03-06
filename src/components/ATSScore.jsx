@@ -1,8 +1,8 @@
 import React from 'react';
 import { useResume } from '../context/ResumeContext';
-import './AtsScore.css';
+import './ATSScore.css';
 
-export default function AtsScore() {
+export default function ATSScore() {
   const { atsScore } = useResume();
   const { score, suggestions } = atsScore;
 

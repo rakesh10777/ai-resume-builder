@@ -2,7 +2,7 @@ import { useResume } from '../context/ResumeContext';
 import TemplateTabs from '../components/TemplateTabs';
 import ColorPicker from '../components/ColorPicker';
 import ExportButtons from '../components/ExportButtons';
-import AtsScore from '../components/AtsScore';
+import ATSScore from '../components/ATSScore';
 import './Preview.css';
 
 export default function Preview() {
@@ -21,7 +21,7 @@ export default function Preview() {
       <ExportButtons resume={resume} />
       <div className="preview-scroll">
         <div className="preview-container">
-          <AtsScore />
+          <ATSScore />
           <article className={`resume-preview template-${template}`} style={{ '--accent-color': accentColor }}>
             <header className="resume-header">
               <h1>{resume.personalInfo.name || 'Your Name'}</h1>
