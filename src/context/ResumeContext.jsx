@@ -111,8 +111,8 @@ function hasNumbers(text) {
 const ACTION_VERBS = ['Built', 'Developed', 'Designed', 'Implemented', 'Led', 'Improved', 'Created', 'Optimized', 'Automated', 'Managed', 'Created', 'Established', 'Launched', 'Delivered', 'Reduced', 'Increased', 'Built', 'Engineered', 'Architected', 'Spearheaded'];
 
 function startsWithActionVerb(text) {
-  const trimmed = text.trim();
-  return ACTION_VERBS.some(verb => trimmed.toLowerCase().startsWith(verb.toLowerCase()));
+  const words = text.trim().toLowerCase().split(/\s+/);
+  return words.some(word => ACTION_VERBS.some(verb => verb.toLowerCase() === word));
 }
 
 function getTotalSkills(skills) {
@@ -123,56 +123,81 @@ function calculateATSScore(resume) {
   let score = 0;
   const suggestions = [];
 
-  const summaryWords = countWords(resume.summary);
-  if (summaryWords >= 40 && summaryWords <= 120) {
-    score += 15;
-  } else {
-    suggestions.push('Write a stronger summary (40–120 words).');
-  }
-
-  if (resume.projects.length >= 2) {
+  if (resume.personalInfo.name?.trim()) {
     score += 10;
   } else {
-    suggestions.push('Add at least 2 projects.');
+    suggestions.push('Add your name (+10 points)');
+  }
+
+  if (resume.personalInfo.email?.trim()) {
+    score += 10;
+  } else {
+    suggestions.push('Add an email address (+10 points)');
+  }
+
+  if (resume.personalInfo.phone?.trim()) {
+    score += 5;
+  } else {
+    suggestions.push('Add a phone number (+5 points)');
+  }
+
+  if (resume.summary && resume.summary.length > 50) {
+    score += 10;
+  } else {
+    suggestions.push('Add a professional summary over 50 characters (+10 points)');
+  }
+
+  if (resume.summary && startsWithActionVerb(resume.summary)) {
+    score += 10;
+  } else {
+    suggestions.push('Include action verbs in summary like "Led", "Designed", "Built" (+10 points)');
   }
 
   if (resume.experience.length >= 1) {
+    const hasBullets = resume.experience.some(exp => exp.description && exp.description.length > 0);
+    if (hasBullets) {
+      score += 15;
+    } else {
+      suggestions.push('Add descriptions (bullets) to your experience (+15 points)');
+    }
+  } else {
+    suggestions.push('Add at least 1 experience entry with bullets (+15 points)');
+  }
+
+  if (resume.education.length >= 1) {
     score += 10;
   } else {
-    suggestions.push('Add at least 1 experience entry.');
+    suggestions.push('Add at least 1 education entry (+10 points)');
   }
 
   const totalSkills = getTotalSkills(resume.skills);
-  if (totalSkills >= 8) {
+  if (totalSkills >= 5) {
     score += 10;
   } else {
-    suggestions.push('Add more skills (target 8+).');
+    suggestions.push('Add at least 5 skills (+10 points)');
   }
 
-  if (resume.links.github || resume.links.linkedin) {
+  if (resume.projects.length >= 1) {
     score += 10;
   } else {
-    suggestions.push('Add GitHub or LinkedIn link.');
+    suggestions.push('Add at least 1 project (+10 points)');
   }
 
-  const hasNumbersInBullets = resume.experience.some(exp => hasNumbers(exp.description)) ||
-                              resume.projects.some(proj => hasNumbers(proj.description));
-  if (hasNumbersInBullets) {
-    score += 15;
+  if (resume.links.linkedin?.trim()) {
+    score += 5;
   } else {
-    suggestions.push('Add measurable impact (numbers) in bullets.');
+    suggestions.push('Add your LinkedIn URL (+5 points)');
   }
 
-  const completeEducation = resume.education.filter(edu => edu.school && edu.degree && edu.year);
-  if (completeEducation.length > 0) {
-    score += 10;
+  if (resume.links.github?.trim()) {
+    score += 5;
   } else {
-    suggestions.push('Complete all education fields.');
+    suggestions.push('Add your GitHub URL (+5 points)');
   }
 
   score = Math.min(score, 100);
 
-  return { score, suggestions: suggestions.slice(0, 3) };
+  return { score, suggestions };
 }
 
 function calculateImprovements(resume) {
@@ -185,7 +210,7 @@ function calculateImprovements(resume) {
   }
 
   const hasNumbersInBullets = resume.experience.some(exp => hasNumbers(exp.description)) ||
-                              resume.projects.some(proj => hasNumbers(proj.description));
+    resume.projects.some(proj => hasNumbers(proj.description));
   if (!hasNumbersInBullets) {
     improvements.push('Add measurable impact with numbers in your bullets');
   }
@@ -248,8 +273,8 @@ export function ResumeProvider({ children }) {
       ...prev,
       skills: {
         ...prev.skills,
-        [category]: prev.skills[category]?.includes(skill.trim()) 
-          ? prev.skills[category] 
+        [category]: prev.skills[category]?.includes(skill.trim())
+          ? prev.skills[category]
           : [...(prev.skills[category] || []), skill.trim()],
       },
     }));
@@ -298,7 +323,7 @@ export function ResumeProvider({ children }) {
   const updateEducation = useCallback((id, field, value) => {
     setResume(prev => ({
       ...prev,
-      education: prev.education.map(edu => 
+      education: prev.education.map(edu =>
         edu.id === id ? { ...edu, [field]: value } : edu
       ),
     }));
@@ -321,7 +346,7 @@ export function ResumeProvider({ children }) {
   const updateExperience = useCallback((id, field, value) => {
     setResume(prev => ({
       ...prev,
-      experience: prev.experience.map(exp => 
+      experience: prev.experience.map(exp =>
         exp.id === id ? { ...exp, [field]: value } : exp
       ),
     }));
@@ -337,10 +362,10 @@ export function ResumeProvider({ children }) {
   const addProject = useCallback(() => {
     setResume(prev => ({
       ...prev,
-      projects: [...prev.projects, { 
-        id: Date.now(), 
-        title: '', 
-        description: '', 
+      projects: [...prev.projects, {
+        id: Date.now(),
+        title: '',
+        description: '',
         techStack: [],
         liveUrl: '',
         githubUrl: '',
@@ -351,7 +376,7 @@ export function ResumeProvider({ children }) {
   const updateProject = useCallback((id, field, value) => {
     setResume(prev => ({
       ...prev,
-      projects: prev.projects.map(proj => 
+      projects: prev.projects.map(proj =>
         proj.id === id ? { ...proj, [field]: value } : proj
       ),
     }));
@@ -361,14 +386,14 @@ export function ResumeProvider({ children }) {
     if (!tech.trim()) return;
     setResume(prev => ({
       ...prev,
-      projects: prev.projects.map(proj => 
-        proj.id === projectId 
-          ? { 
-              ...proj, 
-              techStack: proj.techStack?.includes(tech.trim()) 
-                ? proj.techStack 
-                : [...(proj.techStack || []), tech.trim()] 
-            } 
+      projects: prev.projects.map(proj =>
+        proj.id === projectId
+          ? {
+            ...proj,
+            techStack: proj.techStack?.includes(tech.trim())
+              ? proj.techStack
+              : [...(proj.techStack || []), tech.trim()]
+          }
           : proj
       ),
     }));
@@ -377,8 +402,8 @@ export function ResumeProvider({ children }) {
   const removeProjectTech = useCallback((projectId, tech) => {
     setResume(prev => ({
       ...prev,
-      projects: prev.projects.map(proj => 
-        proj.id === projectId 
+      projects: prev.projects.map(proj =>
+        proj.id === projectId
           ? { ...proj, techStack: proj.techStack?.filter(t => t !== tech) }
           : proj
       ),
@@ -410,17 +435,17 @@ export function ResumeProvider({ children }) {
         { id: 2, company: 'StartupXYZ', role: 'Full Stack Developer', duration: '2019 - 2021', description: 'Built and maintained e-commerce platform from scratch. Integrated payment gateways and real-time inventory system.' },
       ],
       projects: [
-        { 
-          id: 1, 
-          title: 'AI Code Assistant', 
-          description: 'VS Code extension using OpenAI API for intelligent code completion', 
+        {
+          id: 1,
+          title: 'AI Code Assistant',
+          description: 'VS Code extension using OpenAI API for intelligent code completion',
           techStack: ['TypeScript', 'OpenAI API', 'VS Code API'],
           liveUrl: '',
           githubUrl: 'https://github.com/alex/ai-code-assistant'
         },
-        { 
-          id: 2, 
-          title: 'TaskFlow', 
+        {
+          id: 2,
+          title: 'TaskFlow',
           description: 'Project management app with real-time collaboration features',
           techStack: ['React', 'Node.js', 'Socket.io', 'MongoDB'],
           liveUrl: 'https://taskflow.app',

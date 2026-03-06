@@ -1,60 +1,80 @@
-import './ATSScore.css';
+import React from 'react';
+import { useResume } from '../context/ResumeContext';
+import './AtsScore.css';
 
-export default function ATSScore({ score, suggestions, improvements }) {
-  const getScoreColor = () => {
-    if (score >= 80) return 'var(--success)';
-    if (score >= 50) return 'var(--warning)';
-    return 'var(--error)';
-  };
+export default function AtsScore() {
+  const { atsScore } = useResume();
+  const { score, suggestions } = atsScore;
 
-  const getScoreLabel = () => {
-    if (score >= 80) return 'Excellent';
-    if (score >= 60) return 'Good';
-    if (score >= 40) return 'Fair';
-    return 'Needs Work';
-  };
+  let statusText = '';
+  let statusClass = '';
+  let strokeColor = '';
+
+  if (score <= 40) {
+    statusText = 'Needs Work';
+    statusClass = 'danger';
+    strokeColor = '#ef4444';
+  } else if (score <= 70) {
+    statusText = 'Getting There';
+    statusClass = 'warning';
+    strokeColor = '#f59e0b';
+  } else {
+    statusText = 'Strong Resume';
+    statusClass = 'success';
+    strokeColor = '#22c55e';
+  }
+
+  // Calculate circular progress
+  const radius = 36;
+  const circumference = 2 * Math.PI * radius;
+  const strokeDashoffset = circumference - (score / 100) * circumference;
 
   return (
-    <div className="ats-score-panel">
-      <div className="ats-header">
-        <span className="ats-label">ATS Readiness Score</span>
-        <span className="ats-status" style={{ color: getScoreColor() }}>
-          {getScoreLabel()}
-        </span>
-      </div>
-      
-      <div className="score-meter-container">
-        <div className="score-meter">
-          <div 
-            className="score-fill" 
-            style={{ 
-              width: `${score}%`,
-              backgroundColor: getScoreColor()
-            }}
-          />
+    <div className="ats-score-container">
+      <div className="ats-score-header">
+        <div className="score-circle">
+          <svg className="progress-ring" width="90" height="90">
+            <circle
+              className="progress-ring__circle-bg"
+              strokeWidth="6"
+              fill="transparent"
+              r={radius}
+              cx="45"
+              cy="45"
+            />
+            <circle
+              className={`progress-ring__circle ${statusClass}`}
+              stroke={strokeColor}
+              strokeWidth="6"
+              strokeDasharray={circumference}
+              strokeDashoffset={strokeDashoffset}
+              fill="transparent"
+              r={radius}
+              cx="45"
+              cy="45"
+              transform="rotate(-90 45 45)"
+            />
+          </svg>
+          <div className="score-text">
+            <span className="score-number">{score}</span>
+            <span className="score-max">/100</span>
+          </div>
         </div>
-        <span className="score-value" style={{ color: getScoreColor() }}>
-          {score}
-        </span>
+        <div className="score-info">
+          <h3>ATS Score</h3>
+          <p className={`status-text ${statusClass}`}>{statusText}</p>
+        </div>
       </div>
 
-      {suggestions.length > 0 && (
-        <div className="suggestions">
-          <h4>Suggestions</h4>
+      {suggestions && suggestions.length > 0 && (
+        <div className="ats-suggestions">
+          <h4>Improvement Suggestions</h4>
           <ul>
-            {suggestions.map((suggestion, index) => (
-              <li key={index}>{suggestion}</li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {improvements && improvements.length > 0 && (
-        <div className="improvements">
-          <h4>Top 3 Improvements</h4>
-          <ul>
-            {improvements.map((improvement, index) => (
-              <li key={index}>{improvement}</li>
+            {suggestions.map((sug, idx) => (
+              <li key={idx}>
+                <span className="suggestion-icon">💡</span>
+                {sug}
+              </li>
             ))}
           </ul>
         </div>

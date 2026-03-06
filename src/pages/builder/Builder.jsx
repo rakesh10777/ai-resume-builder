@@ -99,7 +99,7 @@ export default function Builder() {
           Load Sample Data
         </button>
       </div>
-      
+
       <div className="builder-container">
         <div className="builder-form">
           <FormSection title="Personal Info">
@@ -206,7 +206,7 @@ export default function Builder() {
                   <label>Description</label>
                   <textarea
                     value={exp.description}
-                    onChange={(v) => updateExperience(exp.id, 'description', v)}
+                    onChange={(e) => updateExperience(exp.id, 'description', e.target.value)}
                     placeholder="Describe your responsibilities and achievements..."
                     rows={3}
                   />
@@ -280,8 +280,8 @@ export default function Builder() {
                 />
               </div>
 
-              <button 
-                className="btn-suggest" 
+              <button
+                className="btn-suggest"
                 onClick={handleSuggestSkills}
                 disabled={suggesting}
               >

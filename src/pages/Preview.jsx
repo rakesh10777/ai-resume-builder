@@ -2,6 +2,7 @@ import { useResume } from '../context/ResumeContext';
 import TemplateTabs from '../components/TemplateTabs';
 import ColorPicker from '../components/ColorPicker';
 import ExportButtons from '../components/ExportButtons';
+import AtsScore from '../components/AtsScore';
 import './Preview.css';
 
 export default function Preview() {
@@ -9,9 +10,9 @@ export default function Preview() {
   const skillsArray = resume.skills;
   const accentColor = getColorValue();
 
-  const hasAnySkills = (skillsArray.technical?.length > 0) || 
-                      (skillsArray.soft?.length > 0) || 
-                      (skillsArray.tools?.length > 0);
+  const hasAnySkills = (skillsArray.technical?.length > 0) ||
+    (skillsArray.soft?.length > 0) ||
+    (skillsArray.tools?.length > 0);
 
   return (
     <div className="preview-page">
@@ -20,6 +21,7 @@ export default function Preview() {
       <ExportButtons resume={resume} />
       <div className="preview-scroll">
         <div className="preview-container">
+          <AtsScore />
           <article className={`resume-preview template-${template}`} style={{ '--accent-color': accentColor }}>
             <header className="resume-header">
               <h1>{resume.personalInfo.name || 'Your Name'}</h1>
