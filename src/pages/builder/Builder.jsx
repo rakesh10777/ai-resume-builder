@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useResume } from '../../context/ResumeContext';
 import ATSScore from '../../components/ATSScore';
 import TemplateTabs from '../../components/TemplateTabs';
+import ColorPicker from '../../components/ColorPicker';
 import TagInput from '../../components/TagInput';
 import ProjectCard from '../../components/ProjectCard';
 import LivePreview from './LivePreview';
@@ -60,6 +61,7 @@ export default function Builder() {
     resume,
     atsScore,
     improvements,
+    getColorValue,
     updatePersonalInfo,
     updateSummary,
     addSkill,
@@ -81,6 +83,7 @@ export default function Builder() {
   } = useResume();
 
   const [suggesting, setSuggesting] = useState(false);
+  const accentColor = getColorValue();
 
   const handleSuggestSkills = async () => {
     setSuggesting(true);
@@ -307,10 +310,11 @@ export default function Builder() {
 
         <div className="builder-preview">
           <TemplateTabs />
+          <ColorPicker />
           <div className="preview-content">
             <h3 className="preview-title">Live Preview</h3>
             <ATSScore score={atsScore.score} suggestions={atsScore.suggestions} improvements={improvements} />
-            <LivePreview resume={resume} />
+            <LivePreview resume={resume} accentColor={accentColor} />
           </div>
         </div>
       </div>

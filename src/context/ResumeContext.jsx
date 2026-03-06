@@ -4,6 +4,15 @@ const ResumeContext = createContext(null);
 
 const STORAGE_KEY = 'resumeBuilderData';
 const TEMPLATE_KEY = 'resumeBuilderTemplate';
+const COLOR_KEY = 'resumeBuilderColor';
+
+const COLORS = [
+  { id: 'teal', name: 'Teal', value: 'hsl(168, 60%, 40%)' },
+  { id: 'navy', name: 'Navy', value: 'hsl(220, 60%, 35%)' },
+  { id: 'burgundy', name: 'Burgundy', value: 'hsl(345, 60%, 35%)' },
+  { id: 'forest', name: 'Forest', value: 'hsl(150, 50%, 30%)' },
+  { id: 'charcoal', name: 'Charcoal', value: 'hsl(0, 0%, 25%)' },
+];
 
 const initialResume = {
   personalInfo: {
@@ -63,11 +72,31 @@ function loadTemplateFromStorage() {
   return 'classic';
 }
 
+function loadColorFromStorage() {
+  try {
+    const stored = localStorage.getItem(COLOR_KEY);
+    if (stored) {
+      return stored;
+    }
+  } catch (e) {
+    console.error('Failed to load color from localStorage:', e);
+  }
+  return 'teal';
+}
+
 function saveTemplateToStorage(template) {
   try {
     localStorage.setItem(TEMPLATE_KEY, template);
   } catch (e) {
     console.error('Failed to save template to localStorage:', e);
+  }
+}
+
+function saveColorToStorage(color) {
+  try {
+    localStorage.setItem(COLOR_KEY, color);
+  } catch (e) {
+    console.error('Failed to save color to localStorage:', e);
   }
 }
 
@@ -179,6 +208,7 @@ function calculateImprovements(resume) {
 export function ResumeProvider({ children }) {
   const [resume, setResume] = useState(loadFromStorage);
   const [template, setTemplate] = useState(loadTemplateFromStorage);
+  const [color, setColor] = useState(loadColorFromStorage);
   const [atsScore, setAtsScore] = useState({ score: 0, suggestions: [] });
   const [improvements, setImprovements] = useState([]);
 
@@ -191,6 +221,15 @@ export function ResumeProvider({ children }) {
   useEffect(() => {
     saveTemplateToStorage(template);
   }, [template]);
+
+  useEffect(() => {
+    saveColorToStorage(color);
+  }, [color]);
+
+  const getColorValue = useCallback(() => {
+    const colorObj = COLORS.find(c => c.id === color);
+    return colorObj ? colorObj.value : COLORS[0].value;
+  }, [color]);
 
   const updatePersonalInfo = useCallback((field, value) => {
     setResume(prev => ({
@@ -431,6 +470,10 @@ export function ResumeProvider({ children }) {
     clearData,
     atsScore,
     improvements,
+    color,
+    setColor,
+    getColorValue,
+    COLORS,
   };
 
   return (

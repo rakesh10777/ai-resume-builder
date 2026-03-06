@@ -1,11 +1,13 @@
 import { useResume } from '../context/ResumeContext';
 import TemplateTabs from '../components/TemplateTabs';
+import ColorPicker from '../components/ColorPicker';
 import ExportButtons from '../components/ExportButtons';
 import './Preview.css';
 
 export default function Preview() {
-  const { resume, template } = useResume();
+  const { resume, template, getColorValue } = useResume();
   const skillsArray = resume.skills;
+  const accentColor = getColorValue();
 
   const hasAnySkills = (skillsArray.technical?.length > 0) || 
                       (skillsArray.soft?.length > 0) || 
@@ -14,10 +16,11 @@ export default function Preview() {
   return (
     <div className="preview-page">
       <TemplateTabs />
-      <ExportButtons resume={resume} template={template} />
+      <ColorPicker />
+      <ExportButtons resume={resume} />
       <div className="preview-scroll">
         <div className="preview-container">
-          <article className={`resume-preview template-${template}`}>
+          <article className={`resume-preview template-${template}`} style={{ '--accent-color': accentColor }}>
             <header className="resume-header">
               <h1>{resume.personalInfo.name || 'Your Name'}</h1>
               <div className="contact-info">

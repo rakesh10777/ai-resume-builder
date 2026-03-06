@@ -1,9 +1,17 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './ExportButtons.css';
 
-export default function ExportButtons({ resume, template }) {
+export default function ExportButtons({ resume }) {
   const [copied, setCopied] = useState(false);
   const [warning, setWarning] = useState('');
+  const [toast, setToast] = useState(false);
+
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => setToast(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
 
   const hasName = resume.personalInfo.name.trim().length > 0;
   const hasContent = resume.experience.length > 0 || resume.projects.length > 0;
@@ -99,6 +107,7 @@ export default function ExportButtons({ resume, template }) {
 
   const handlePrint = () => {
     checkAndWarn();
+    setToast(true);
     setTimeout(() => {
       window.print();
     }, 100);
@@ -122,6 +131,7 @@ export default function ExportButtons({ resume, template }) {
         {copied ? 'Copied!' : 'Copy Resume as Text'}
       </button>
       {warning && <div className="export-warning">{warning}</div>}
+      {toast && <div className="export-toast">PDF export ready! Check your downloads.</div>}
     </div>
   );
 }

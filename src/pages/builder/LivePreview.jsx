@@ -1,7 +1,7 @@
 import { useResume } from '../../context/ResumeContext';
 import './LivePreview.css';
 
-export default function LivePreview({ resume }) {
+export default function LivePreview({ resume, accentColor }) {
   const { template } = useResume();
   const skillsArray = resume.skills;
 
@@ -10,7 +10,7 @@ export default function LivePreview({ resume }) {
                       (skillsArray.tools?.length > 0);
 
   return (
-    <div className={`live-preview template-${template}`}>
+    <div className={`live-preview template-${template}`} style={{ '--accent-color': accentColor }}>
       <div className="resume-document">
         <header className="resume-header">
           <h1 className="resume-name">{resume.personalInfo.name || 'Your Name'}</h1>
